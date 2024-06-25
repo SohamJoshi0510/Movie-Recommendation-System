@@ -1,12 +1,11 @@
-Recommender System
+Recommendation Systems
     ->Online Salesman
 
-
-Recommender System affects the conversion rate of
+Recommendation System affects the conversion rate of
 your business.
 
 
-Types of Recommender Systems
+Types of Recommendation Systems
 
     Content Based
     Collaborative Filtering Based 
@@ -132,7 +131,7 @@ Preprocessing
 
 
     #redirect #001 
-    Code: (See potential problem solved using Stemming [search: #001])
+    Code: (See potential problem solved using Stemming [search: #001 using Ctrl+F])
 
     from sklearn.feature_extraction.text import CountVectorizer
     count_vectorizer = CountVectorizer(max_features=5000, stop_words='english')
@@ -161,7 +160,7 @@ Preprocessing
     tags_df['tags'] = tags_df['tags'].apply(stem)
     tags_df['tags']
 
-    Goto #redirect #001
+    Go to #redirect #001
 
     For higher dimensions, the euclidean distance is not reliable.
     Instead, we compute the cosine distance between vectors.
