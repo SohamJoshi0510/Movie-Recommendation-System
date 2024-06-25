@@ -1,0 +1,204 @@
+Recommender System
+    ->Online Salesman
+
+
+Recommender System affects the conversion rate of
+your business.
+
+
+Types of Recommender Systems
+
+    Content Based
+    Collaborative Filtering Based 
+    Hybrid
+
+    Content Based RS
+        Recommendations are made based on the
+        content consumed in the past.
+
+        Involves tag creation.
+
+    Collaborative Filtering RS
+        Recommendations are made based on the 
+        similarity of preferences of users.
+
+    Hybrid 
+        Combines both the approaches.
+
+
+
+Steps
+    Data Acquisition
+    Preprocessing
+    Model creation
+    Website development
+    Deployment
+
+
+Dataset
+    tmdb_5000_movies.csv
+    tmdb_5000_credits.csv
+
+
+Preprocessing
+    Convert csv files to dataframes.
+    Merge dataframes on the title column.
+    Select columns:
+        genres
+        id
+        keywords
+        title
+        overview
+        cast
+        crew
+
+    Check for null values.
+        movies.isnull().sum().
+
+        "overview" has 3 null values.
+            movies.dropna(inplace=True): drop these records.
+
+    Check for duplicate values.
+        movies.duplicated().sum()
+
+        No duplicate values found.
+
+    Format conversion
+        from
+        list of dictionaries with keys=['id', 'name']
+
+        to
+        list of dictionary['name'] from each dictionary
+        in dictionaries 
+
+        Code:
+                
+        import ast
+
+        movies.genres = movies.genres.apply(ast.literal_eval)
+        movies.genres = movies.genres.apply(lambda list_: [dict_['name'] for dict_ in list_])
+
+        movies.keywords = movies.keywords.apply(ast.literal_eval)
+        movies.keywords = movies.keywords.apply(lambda list_: [dict_['name'] for dict_ in list_])
+
+        movies.cast = movies.cast.apply(ast.literal_eval)
+        movies.cast = movies.cast.apply(lambda list_: [dict_['name'] for dict_ in list_][:3])
+
+
+        movies.crew = movies.crew.apply(ast.literal_eval)
+        movies.crew = movies.crew.apply(lambda list_: [dict_['name'] for dict_ in list_ if dict_['job'] == 'Director'])
+
+        movies.overview = movies.overview.apply(lambda str_: str_.split())
+        movies.head()
+
+        Remove spaces between words
+        (Eg. Joe Saldana -> JoeSaldana)
+
+        movies.genres = movies.genres.apply(lambda list_: [str_.replace(' ', '') for str_ in list_])
+        movies.keywords =  movies.keywords.apply(lambda list_: [str_.replace(' ', '') for str_ in list_])
+        movies.cast = movies.cast.apply(lambda list_: [str_.replace(' ', '') for str_ in list_])
+        movies.crew = movies.crew.apply(lambda list_: [str_.replace(' ', '') for str_ in list_])
+        movies.head()
+
+
+
+    Tag Creation 
+    movies['tags'] = movies.overview + movies.genres + movies.keywords + movies.cast + movies.crew
+    movies
+
+    Creating a new dataframe
+    tags_df = movies[['id', 'title', 'tags']]
+    tags_df
+
+    Converting the tags column datatype from list to string
+    Convert to lowecacse
+
+    tags_df['tags'] = tags_df['tags'].apply(lambda list_: " ". join(list_))
+    tags_df['tags'] = tags_df['tags'].apply(lambda str_: str_.lower())
+    tags_df
+
+
+    Vectorization
+
+    Text Vectorization
+    movies['tags'](text) -> Conversion into vectors
+
+    Technique employed
+        Bag of words
+
+    Function used 
+        CountVectorizer 
+
+
+
+    #redirect #001 
+    Code: (See potential problem solved using Stemming [search: #001])
+
+    from sklearn.feature_extraction.text import CountVectorizer
+    count_vectorizer = CountVectorizer(max_features=5000, stop_words='english')
+
+    vector = count_vectorizer.fit_transform(tags_df['tags']).toarray()
+    count_vectorizer.get_feature_names_out()  [old version of sci-kit learn]
+
+
+    #001 Problem:
+    Some words included in features are essentially the same semantically.
+    Example: activities and activity, actor and actors.
+
+    Solution:
+    Stemming 
+
+    # Stemming
+    import nltk
+    from nltk.stem.porter import PorterStemmer
+    ps = PorterStemmer()
+
+    def stem(bag_of_words):
+        list_of_words = bag_of_words.split()
+        stemmed_list_of_words = [ps.stem(word) for word in list_of_words]
+        return " ".join(stemmed_list_of_words)
+
+    tags_df['tags'] = tags_df['tags'].apply(stem)
+    tags_df['tags']
+
+    Goto #redirect #001
+
+    For higher dimensions, the euclidean distance is not reliable.
+    Instead, we compute the cosine distance between vectors.
+
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    similarity = cosine_similarity(vector)
+    similarity
+    
+    Define a recommend function that recommends n movies for a given movie 
+
+    def recommend(movie, n=5):
+        index = df_with_tags[df_with_tags['title'] == movie].index[0]
+        distances = similarity[index]
+        movies = heapq.nlargest(n+1, enumerate(distances), key=lambda x: x[1])
+
+        return movies[1:]
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
