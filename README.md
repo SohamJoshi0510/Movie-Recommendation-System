@@ -1,7 +1,7 @@
 # Movie-Recommendation-System
 This repository contains a Movie Recommendation System that suggests movies based on the similarity of their content. The project includes a backend script for processing and analyzing movie data, and a frontend application for user interaction.
 
-# Dataset Link
+## Dataset Link
 https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata
 
 ## Features
@@ -16,9 +16,7 @@ https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata
 - **recommender.py**: Backend script that processes movie data, generates feature vectors, and calculates similarity scores.  
 - **frontend.py**: Streamlit application that provides a user interface to get movie recommendations.
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - Python 3.x  
 - Required Python libraries: `numpy`, `pandas`, `nltk`, `scikit-learn`, `streamlit`, `pickle`
@@ -46,6 +44,6 @@ https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata
 - Click the "Recommend" button.
 - View the list of recommended movies.
 
-### Acknowledgements
+## Acknowledgements
 - Data sourced from TMDB.
 - Inspired by various tutorials and articles on movie recommendation systems.
