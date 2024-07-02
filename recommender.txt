@@ -1,5 +1,4 @@
-Recommendation Systems
-    ->Online Salesman
+Recommendation System -> Online Salesman
 
 Recommendation System affects the conversion rate of
 your business.
@@ -178,26 +177,3 @@ Preprocessing
         movies = heapq.nlargest(n+1, enumerate(distances), key=lambda x: x[1])
 
         return movies[1:]
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
